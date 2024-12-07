@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f3f3f3;
+    }
+    .calculator {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      background: #444;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    .display {
+      background: #27ae60;
+      color: white;
+      font-size: 2.5rem;
+      text-align: right;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .button {
+      background: #fff;
+      color: #444;
+      font-size: 1.5rem;
+      padding: 15px;
+      text-align: center;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+    .button:active {
+      background: #ddd;
+    }
+    .button.operator {
+      background: #f39c12;
+      color: #fff;
+    }
+    .button.equal {
+      background: #e74c3c;
+      color: #fff;
+    }
+    .button.clear {
+      background: #c0392b;
+      color: #fff;
+    }
+    .button.back {
+      background: #2980b9;
+      color: #fff;
+    }
+    .button.special {
+      background: #8e44ad;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <div class="display" id="display">0</div>
+    <div class="buttons">
+      <button class="button clear" onclick="clearDisplay()">C</button>
+      <button class="button back" onclick="backspace()">Back</button>
+      <button class="button special" onclick="appendValue('%')">%</button>
+      <button class="button operator" onclick="appendValue('/')">÷</button>
+      <button class="button" onclick="appendValue('7')">7</button>
+      <button class="button" onclick="appendValue('8')">8</button>
+      <button class="button" onclick="appendValue('9')">9</button>
+      <button class="button operator" onclick="appendValue('*')">×</button>
+      <button class="button" onclick="appendValue('4')">4</button>
+      <button class="button" onclick="appendValue('5')">5</button>
+      <button class="button" onclick="appendValue('6')">6</button>
+      <button class="button operator" onclick="appendValue('-')">−</button>
+      <button class="button" onclick="appendValue('1')">1</button>
+      <button class="button" onclick="appendValue('2')">2</button>
+      <button class="button" onclick="appendValue('3')">3</button>
+      <button class="button operator" onclick="appendValue('+')">+</button>
+      <button class="button" onclick="appendValue('0')">0</button>
+      <button class="button" onclick="appendValue('00')">00</button>
+      <button class="button" onclick="appendValue('.')">.</button>
+      <button class="button equal" onclick="calculate()">=</button>
+    </div>
+  </div>
+
+  <script>
+    let display = document.getElementById('display');
+
+    // Clear the display
+    function clearDisplay() {
+      display.innerText = '0';
+    }
+
+    // Append value to the display
+    function appendValue(value) {
+      if (display.innerText === '0') {
+        display.innerText = value;
+      } else {
+        display.innerText += value;
+      }
+    }
+
+    // Perform the calculation
+    function calculate() {
+      try {
+        display.innerText = eval(display.innerText.replace('×', '*').replace('÷', '/'));
+      } catch (error) {
+        display.innerText = 'Error';
+      }
+    }
+
+    // Remove the last character (Back button functionality)
+    function backspace() {
+      display.innerText = display.innerText.slice(0, -1);
+      if (display.innerText === '') {
+        display.innerText = '0';
+      }
+    }
+
+    // Handle keyboard inputs
+    document.addEventListener('keydown', (event) => {
+      const key = event.key;
+
+      // Numbers and operators
+      if ((key >= '0' && key <= '9') || ['+', '-', '*', '/'].includes(key)) {
+        appendValue(key);
+      } 
+      // Decimal point
+      else if (key === '.') {
+        appendValue('.');
+      } 
+      // Enter key for "="
+      else if (key === 'Enter') {
+        calculate();
+      } 
+      // Clear with "Escape"
+      else if (key === 'Escape') {
+        clearDisplay();
+      }
+      // Backspace to delete the last character
+      else if (key === 'Backspace') {
+        backspace();
+      }
+    });
+  </script>
+</body>
+</html>
